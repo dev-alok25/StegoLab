@@ -20,7 +20,7 @@
     <main>
       <section class="card" id="encode-card">
         <h2>Encode message</h2>
-        <p class="section-description">Select a PNG image, enter a message, optionally provide a passphrase, then encode.</p>
+        <p class="section-description">Select a PNG image, enter a message, then encode.</p>
         <div class="form-grid">
           <label>
             Select PNG
@@ -30,11 +30,6 @@
           <label>
             Secret message
             <textarea id="enc-msg" placeholder="Type secret message..." rows="5"></textarea>
-          </label>
-
-          <label>
-            Optional passphrase
-            <input id="enc-passphrase" type="password" placeholder="Encrypt hidden text" />
           </label>
         </div>
 
@@ -46,7 +41,7 @@
           <div class="stats-box">
             <strong>Capacity</strong>
             <p id="enc-capacity">Select a PNG to calculate capacity.</p>
-            <p class="note">The encoded image remains PNG. If a passphrase is used, the hidden text is encrypted before embedding.</p>
+            <p class="note">The encoded image remains PNG and stores text in the red-channel LSB.</p>
           </div>
         </div>
 
@@ -63,11 +58,6 @@
           <label>
             Select PNG
             <input type="file" id="dec-file" accept="image/png" />
-          </label>
-
-          <label>
-            Optional passphrase
-            <input id="dec-passphrase" type="password" placeholder="If encoded with a passphrase" />
           </label>
         </div>
 
@@ -104,8 +94,7 @@
         <h2>How it works</h2>
         <ul>
           <li>Text is converted into bytes and hidden in the least significant bit of each image red pixel.</li>
-          <li>The first bytes store a magic header, flags, and payload length.</li>
-          <li>If you enter a passphrase, the text is encrypted before it is embedded.</li>
+          <li>The first bytes store a magic header and payload length.</li>
           <li>The result is downloaded as a PNG file.</li>
         </ul>
       </section>
@@ -133,7 +122,7 @@
           <li>Use only for lawful and educational purposes.</li>
           <li>Do not upload sensitive or private images.</li>
           <li>This is a prototype. Do not rely on it for secure communications.</li>
-          <li>Hidden text is encrypted only when a passphrase is provided.</li>
+          <li>Hidden text is not encrypted.</li>
         </ul>
       </div>
     </footer>
