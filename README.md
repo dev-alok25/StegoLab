@@ -6,7 +6,6 @@ A browser-based PNG steganography prototype.
 
 - Encode hidden text in PNG images
 - Decode hidden text from encoded PNGs
-- Optional passphrase encryption
 - PNG-only validation
 - Image preview and capacity display
 - Copy or download decoded text
@@ -17,11 +16,9 @@ A browser-based PNG steganography prototype.
 2. In the **Encode** section:
    - select a PNG image
    - enter a secret message
-   - optionally provide a passphrase
    - click **Encode & Download**
 3. In the **Decode** section:
    - select an encoded PNG
-   - optionally enter the same passphrase
    - click **Decode**
 
 ## Deployment
@@ -33,4 +30,4 @@ A browser-based PNG steganography prototype.
 ## Notes
 
 - This is a prototype, not a secure communications tool.
-- Hidden text is encrypted only when a passphrase is provided.
+- Hidden text is not encrypted.
