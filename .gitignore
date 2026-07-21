@@ -1,9 +1,5 @@
-*.log
-*.tmp
-*.bak
-.DS_Store
-Thumbs.db
+app/node_modules/
+app/dist/
 node_modules/
-__pycache__/
-*.pyc
-out.png
+*.log
+.DS_Store
