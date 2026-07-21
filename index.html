@@ -1,141 +1,272 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8" />
-  <title>StegoLab — Encode / Decode</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STEGOLAB — hide files inside images</title>
+  <meta name="description" content="Hide files inside images with AES-256 encryption, compression, and adaptive LSB steganography." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#07090c" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="fx-grid" aria-hidden="true"></div>
+  <div class="fx-noise" aria-hidden="true"></div>
+  <div class="fx-vignette" aria-hidden="true"></div>
+
   <div class="page-shell">
-    <header class="page-header">
-      <div class="page-title">
-        <span class="badge">Prototype</span>
-        <h1>StegoLab</h1>
-        <p class="subtitle">Hide text inside PNG images or decode hidden text from them.</p>
+
+    <header class="term-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <div class="brand">
+            <span class="brand-caret">&gt;</span>
+            <span class="brand-mark">STEGOLAB</span>
+            <span class="brand-cursor" aria-hidden="true"></span>
+          </div>
+          <span class="header-divider" aria-hidden="true"></span>
+          <span class="term-path">~/stegolab</span>
+        </div>
+
+        <div class="header-center">
+          <span class="header-page-title" id="header-page-title">encode</span>
+        </div>
+
+        <div class="header-right">
+          <span class="status-pill" id="engine-status" title="AES-256-GCM via Web Crypto API, runs entirely in your browser">
+            <span class="status-dot"></span>
+            <span class="status-label">engine ready</span>
+          </span>
+          <a class="icon-btn" href="https://github.com/dev-alok25/StegoLab" target="_blank" rel="noopener" aria-label="View on GitHub">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 .5C5.73.5.98 5.24.98 11.52c0 5.02 3.26 9.28 7.78 10.78.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.17.69-3.84-1.34-3.84-1.34-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.53-.29-5.19-1.27-5.19-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.17a10.9 10.9 0 015.72 0c2.18-1.48 3.14-1.17 3.14-1.17.62 1.57.23 2.73.11 3.02.73.8 1.17 1.82 1.17 3.06 0 4.37-2.67 5.34-5.21 5.62.41.36.77 1.06.77 2.15 0 1.55-.01 2.8-.01 3.18 0 .3.2.66.79.55 4.51-1.51 7.77-5.76 7.77-10.78C23.02 5.24 18.27.5 12 .5z"/></svg>
+          </a>
+          <button id="theme-toggle" type="button" class="icon-btn" aria-label="Toggle theme">
+            <span class="icon-toggle-mark">◐</span>
+          </button>
+        </div>
       </div>
-      <button id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
     </header>
 
+    <nav class="tab-nav" role="tablist" aria-label="Main navigation">
+      <div class="tab-nav-inner">
+        <div class="tab-track">
+          <button class="tab-btn tab-active" role="tab" aria-selected="true" data-tab="encode" id="tab-btn-encode">
+            <span class="tab-idx">01</span><span class="tab-label">Encode</span>
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" data-tab="decode" id="tab-btn-decode">
+            <span class="tab-idx">02</span><span class="tab-label">Decode</span>
+          </button>
+          <span class="tab-indicator" id="tab-indicator" aria-hidden="true"></span>
+        </div>
+        <div class="tab-nav-fill" aria-hidden="true">
+          <span class="kbd-hint"><kbd>Ctrl</kbd><kbd>E</kbd></span>
+          <span class="kbd-hint"><kbd>Ctrl</kbd><kbd>D</kbd></span>
+        </div>
+      </div>
+    </nav>
+
     <main>
-      <section class="card" id="encode-card">
-        <h2>Encode message</h2>
-        <p class="section-description">Select a PNG image, enter a message, then encode.</p>
-        <div class="form-grid">
-          <label>
-            Select PNG
-            <input type="file" id="enc-file" accept="image/png" />
-          </label>
+      <section class="tab-panel panel-active" role="tabpanel" id="tab-encode" aria-labelledby="tab-btn-encode">
+        <div class="inline-alert" id="encode-alert" role="status" aria-live="polite"></div>
+        <div class="workflow-grid">
 
-          <label>
-            Secret message
-            <textarea id="enc-msg" placeholder="Type secret message..." rows="5"></textarea>
-          </label>
-        </div>
+          <div class="card span-half" data-channel="r">
+            <h2><span class="step-num">01</span> Image</h2>
+            <div class="drop-zone" id="encode-drop-zone" role="button" tabindex="0" aria-label="Drop image here">
+              <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
+              <div class="drop-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5.2-5.2a1.5 1.5 0 00-2.1 0L4 19"/></svg>
+              </div>
+              <div class="drop-message">Drop image or click to browse</div>
+              <div class="drop-hint">PNG · BMP · TIFF · WebP</div>
+            </div>
+            <input type="file" id="enc-file" accept=".png,.bmp,.tiff,.tif,.webp" style="display:none" />
 
-        <div class="preview-row">
-          <div class="preview-box">
-            <strong>Image preview</strong>
-            <img id="enc-preview" alt="Selected image preview" />
-          </div>
-          <div class="stats-box">
-            <strong>Capacity</strong>
-            <p id="enc-capacity">Select a PNG to calculate capacity.</p>
-            <p class="note">The encoded image remains PNG and stores text in the red-channel LSB.</p>
-          </div>
-        </div>
+            <div class="preview-container">
+              <div class="preview-box">
+                <span class="box-label">preview</span>
+                <div class="preview-frame">
+                  <img id="enc-preview" alt="Image preview" style="display:none" />
+                  <div class="preview-empty">no image loaded</div>
+                </div>
+              </div>
+              <div class="info-box">
+                <span class="box-label">image info</span>
+                <div class="stats-grid" id="enc-stats"><div class="grid-empty">awaiting input</div></div>
+              </div>
+            </div>
 
-        <div class="actions-row">
-          <button id="enc-btn">Encode & Download</button>
-          <span class="status" id="enc-status"></span>
-        </div>
-      </section>
-
-      <section class="card" id="decode-card">
-        <h2>Decode message</h2>
-        <p class="section-description">Select a PNG image encoded by this tool, then decode it.</p>
-        <div class="form-grid">
-          <label>
-            Select PNG
-            <input type="file" id="dec-file" accept="image/png" />
-          </label>
-        </div>
-
-        <div class="preview-row">
-          <div class="preview-box">
-            <strong>Image preview</strong>
-            <img id="dec-preview" alt="Decoded image preview" />
-          </div>
-          <div class="stats-box">
-            <strong>Status</strong>
-            <p id="dec-status-text">Select an encoded PNG to begin.</p>
-            <p class="note">If the image is not encoded with this tool, decoding will report that.</p>
-          </div>
-        </div>
-
-        <div class="actions-row">
-          <button id="dec-btn">Decode</button>
-          <span class="status" id="dec-status"></span>
-        </div>
-
-        <div class="output-card">
-          <div class="output-toolbar">
-            <strong>Decoded text</strong>
-            <div class="output-actions">
-              <button id="copy-btn" type="button" disabled>Copy</button>
-              <button id="download-btn" type="button" disabled>Download</button>
+            <div class="info-box">
+              <span class="box-label">capacity</span>
+              <div class="stats-grid" id="enc-capacity"><div class="grid-empty">load an image first</div></div>
             </div>
           </div>
-          <pre id="dec-output">Decoded text will appear here.</pre>
+
+          <div class="card span-half" data-channel="g">
+            <h2><span class="step-num">02</span> Secret Message</h2>
+            <div class="drop-zone payload-zone" id="payload-drop-zone" role="button" tabindex="0" aria-label="Drop file to hide here">
+              <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
+              <div class="drop-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M13 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V9z"/><path d="M13 3v6h6"/></svg>
+              </div>
+              <div class="drop-message" id="enc-file-label">Drop files or click to browse</div>
+              <div class="drop-hint">any file type · select multiple — text, pdf, zip, audio, images…</div>
+            </div>
+            <input type="file" id="enc-file-payload" multiple style="display:none" />
+
+            <div class="file-chip-list" id="enc-file-list"></div>
+
+            <div class="form-group form-inline">
+              <label for="payload-size">total size</label>
+              <span id="payload-size" class="muted mono-value">no files selected</span>
+            </div>
+
+            <div class="field-divider"><span>or</span></div>
+
+            <div class="form-group">
+              <label for="enc-msg">type a message to hide instead</label>
+              <textarea id="enc-msg" placeholder="type a secret message..." rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="card span-half" data-channel="b">
+            <h2><span class="step-num">03</span> Password <span class="optional-tag">optional</span></h2>
+            <div class="form-group">
+              <label for="enc-password">password</label>
+              <div class="password-field">
+                <input type="password" id="enc-password" placeholder="leave blank to skip encryption" autocomplete="off" />
+                <button type="button" class="pw-toggle" id="enc-pw-toggle" aria-label="Show password" tabindex="-1">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="pw-meter" id="enc-pw-meter" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+              <p class="field-note">Use the exact same password when decoding — even if you leave this blank.</p>
+            </div>
+          </div>
+
+          <div class="card span-half" data-channel="r">
+            <h2><span class="step-num">04</span> Execute</h2>
+            <div class="actions-row">
+              <button class="btn btn-primary" id="enc-btn">
+                <span class="btn-prompt">$</span> encode &amp; download
+              </button>
+            </div>
+            <div id="enc-progress"></div>
+            <div class="info-box" style="margin-top:16px">
+              <span class="box-label">how safe is it</span>
+              <div class="security-grid" id="enc-security"><div class="grid-empty">shows up after you encode</div></div>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <section class="card" id="how-card">
-        <h2>How it works</h2>
-        <ul>
-          <li>Text is converted into bytes and hidden in the least significant bit of each image red pixel.</li>
-          <li>The first bytes store a magic header and payload length.</li>
-          <li>The result is downloaded as a PNG file.</li>
-        </ul>
+      <section class="tab-panel" role="tabpanel" id="tab-decode" aria-labelledby="tab-btn-decode">
+        <div class="inline-alert" id="decode-alert" role="status" aria-live="polite"></div>
+        <div class="workflow-grid">
+
+          <div class="card span-half" data-channel="g">
+            <h2><span class="step-num">01</span> Image</h2>
+            <div class="drop-zone" id="decode-drop-zone" role="button" tabindex="0" aria-label="Drop image here">
+              <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
+              <div class="drop-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/></svg>
+              </div>
+              <div class="drop-message">Drop image or click to browse</div>
+              <div class="drop-hint">PNG · BMP · TIFF · WebP</div>
+            </div>
+            <input type="file" id="dec-file" accept=".png,.bmp,.tiff,.tif,.webp" style="display:none" />
+
+            <div class="preview-container">
+              <div class="preview-box">
+                <span class="box-label">preview</span>
+                <div class="preview-frame">
+                  <img id="dec-preview" alt="Image preview" style="display:none" />
+                  <div class="preview-empty">no image loaded</div>
+                </div>
+              </div>
+              <div class="info-box">
+                <span class="box-label">image info</span>
+                <div class="stats-grid" id="dec-stats"><div class="grid-empty">awaiting input</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card span-half" id="decode-password-group" data-channel="b">
+            <h2><span class="step-num">02</span> Password</h2>
+            <div class="form-group">
+              <label for="dec-password">password</label>
+              <div class="password-field">
+                <input type="password" id="dec-password" placeholder="enter the password, if any" autocomplete="off" />
+                <button type="button" class="pw-toggle" id="dec-pw-toggle" aria-label="Show password" tabindex="-1">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <p class="field-note">Leave blank if none was set — we'll ask if one turns out to be needed.</p>
+            </div>
+
+            <div class="actions-row">
+              <button class="btn btn-primary" id="dec-btn">
+                <span class="btn-prompt">$</span> decode
+              </button>
+            </div>
+            <div id="dec-progress"></div>
+          </div>
+
+          <div class="card card-full" id="dec-result-card" style="display:none" data-channel="g">
+            <h2><span class="result-tag">recovered</span> Result</h2>
+            <div id="dec-result"><p class="muted">Ready to decode. Click Decode.</p></div>
+            <div class="actions-row">
+              <button class="btn btn-primary btn-sm" id="dec-download" style="display:none">
+                <span class="btn-prompt">↓</span> download
+              </button>
+            </div>
+          </div>
+
+          <div class="card card-full" id="dec-metadata-card" style="display:none">
+            <h2>Details</h2>
+            <div id="dec-metadata"></div>
+          </div>
+
+        </div>
       </section>
+
     </main>
 
     <footer class="page-footer">
-      <div>
-        <h3>Prototype information</h3>
-        <p><strong>Created by:</strong> dev-alok25</p>
-        <p><strong>Purpose:</strong> Educational steganography demo for hiding text inside PNG images.</p>
-      </div>
-
-      <div>
-        <h3>use case</h3>
-        <ul>
-          <li>Learning how image steganography works.</li>
-          <li>Testing hidden-text encoding in PNG files.</li>
-          <li>Sharing small demo notes inside a picture.</li>
-        </ul>
-      </div>
-
-      <div>
-        <h3>Terms and conditions</h3>
-        <ul>
-          <li>Use only for lawful and educational purposes.</li>
-          <li>Do not upload sensitive or private images.</li>
-          <li>This is a prototype. Do not rely on it for secure communications.</li>
-          <li>Hidden text is not encrypted.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>for any querry</h3>
-        <ul>
-          <li>dev.alokyadav25@gmail.com</li>
-          <li>linkedin.com/in/alok-yadav-032981340</li>
-          <li>@all rights are reserved.</li>
-        </ul>
-      </div>
+      <div class="footer-prompt"><span class="prompt-user">root@stegolab</span><span class="prompt-sep">:</span><span class="prompt-path">~</span><span class="prompt-sep">$</span> <span class="prompt-cursor"></span></div>
+      <p class="footer-credit">built &amp; maintained by <strong>Alok</strong> &amp; <strong>Prateek</strong></p>
     </footer>
   </div>
 
-  <script src="script.js" defer></script>
+  <button class="fab-execute" id="fab-execute" type="button" aria-label="Run current action">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-14 9V3z"/></svg>
+  </button>
+
+  <script src="js/core/constants.js"></script>
+  <script src="js/utils/crc32.js"></script>
+  <script src="js/utils/helpers.js"></script>
+  <script src="js/utils/file.js"></script>
+  <script src="js/utils/bundle.js"></script>
+  <script src="js/steganography/prng.js"></script>
+  <script src="js/steganography/sobel.js"></script>
+  <script src="js/steganography/embedder.js"></script>
+  <script src="js/steganography/extractor.js"></script>
+  <script src="js/compression/gzip.js"></script>
+  <script src="js/crypto/aes.js"></script>
+  <script src="js/core/header.js"></script>
+  <script src="js/core/encoder.js"></script>
+  <script src="js/core/decoder.js"></script>
+  <script src="js/storage/settings.js"></script>
+  <script src="js/ui/theme.js"></script>
+  <script src="js/ui/progress.js"></script>
+  <script src="js/ui/dragdrop.js"></script>
+  <script src="js/ui/keyboard.js"></script>
+  <script src="js/ui/stats.js"></script>
+  <script src="js/ui/dashboard.js"></script>
+  <script src="js/ui/animation.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
