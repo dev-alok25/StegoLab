@@ -4,25 +4,25 @@
 
 :root {
   /* color tokens */
-  --color-primary: #8d6e63;
-  --color-primary-dim: #795548;
-  --color-secondary: #5d4037;
-  --color-accent: #d7ccc8;
+  --color-primary: #9d4edd;
+  --color-primary-dim: #7b2cbf;
+  --color-secondary: #5a189a;
+  --color-accent: #c77dff;
   --color-danger: #ff5d73;
   --color-warn: #ffb454;
 
-  --color-bg: #1c1514;
-  --color-bg-raised: #251b19;
-  --color-surface: #2d2220;
-  --color-surface-2: #3e312f;
-  --color-border: rgba(255, 235, 230, 0.07);
-  --color-border-strong: rgba(255, 235, 230, 0.14);
-  --color-text: #f5f2f0;
-  --color-text-dim: #c2b5b2;
-  --color-muted: #8d7a76;
+  --color-bg: #100518;
+  --color-bg-raised: #180a22;
+  --color-surface: #221030;
+  --color-surface-2: #301844;
+  --color-border: rgba(230, 200, 255, 0.07);
+  --color-border-strong: rgba(230, 200, 255, 0.14);
+  --color-text: #f3e8ff;
+  --color-text-dim: #d8b4fe;
+  --color-muted: #a855f7;
 
-  --r-primary: 141; --g-primary: 110; --b-primary: 99;
-  --r-accent: 215; --g-accent: 204; --b-accent: 200;
+  --r-primary: 157; --g-primary: 78; --b-primary: 221;
+  --r-accent: 199; --g-accent: 125; --b-accent: 255;
 
   /* typography */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -64,16 +64,16 @@
 }
 
 html[data-theme="light"] {
-  --color-bg: #f5ece9;
+  --color-bg: #faf5ff;
   --color-bg-raised: #ffffff;
   --color-surface: #ffffff;
-  --color-surface-2: #efebe9;
-  --color-border: rgba(45, 34, 32, 0.08);
-  --color-border-strong: rgba(45, 34, 32, 0.16);
-  --color-text: #2d2220;
-  --color-text-dim: #5d4037;
-  --color-muted: #795548;
-  --shadow-glow: 0 0 0 1px rgba(141, 110, 99, 0.14), 0 8px 30px -12px rgba(141, 110, 99, 0.16);
+  --color-surface-2: #f3e8ff;
+  --color-border: rgba(59, 7, 100, 0.08);
+  --color-border-strong: rgba(59, 7, 100, 0.16);
+  --color-text: #3b0764;
+  --color-text-dim: #581c87;
+  --color-muted: #6b21a8;
+  --shadow-glow: 0 0 0 1px rgba(157, 78, 221, 0.14), 0 8px 30px -12px rgba(157, 78, 221, 0.16);
   color-scheme: light;
 }
 
