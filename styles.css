@@ -4,25 +4,25 @@
 
 :root {
   /* color tokens */
-  --color-primary: #9d4edd;
-  --color-primary-dim: #7b2cbf;
-  --color-secondary: #5a189a;
-  --color-accent: #c77dff;
-  --color-danger: #ff5d73;
-  --color-warn: #ffb454;
+  --color-primary: #1e40af;
+  --color-primary-dim: #1d4ed8;
+  --color-secondary: #3b82f6;
+  --color-accent: #60a5fa;
+  --color-danger: #ef4444;
+  --color-warn: #f59e0b;
 
-  --color-bg: #100518;
-  --color-bg-raised: #180a22;
-  --color-surface: #221030;
-  --color-surface-2: #301844;
-  --color-border: rgba(230, 200, 255, 0.07);
-  --color-border-strong: rgba(230, 200, 255, 0.14);
-  --color-text: #f3e8ff;
-  --color-text-dim: #d8b4fe;
-  --color-muted: #a855f7;
+  --color-bg: #0d1117;
+  --color-bg-raised: #161b22;
+  --color-surface: #161b22;
+  --color-surface-2: #30363d;
+  --color-border: #30363d;
+  --color-border-strong: #475569;
+  --color-text: #f8fafc;
+  --color-text-dim: #94a3b8;
+  --color-muted: #64748b;
 
-  --r-primary: 157; --g-primary: 78; --b-primary: 221;
-  --r-accent: 199; --g-accent: 125; --b-accent: 255;
+  --r-primary: 30; --g-primary: 64; --b-primary: 175;
+  --r-accent: 96; --g-accent: 165; --b-accent: 250;
 
   /* typography */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -64,16 +64,16 @@
 }
 
 html[data-theme="light"] {
-  --color-bg: #faf5ff;
-  --color-bg-raised: #ffffff;
-  --color-surface: #ffffff;
-  --color-surface-2: #f3e8ff;
-  --color-border: rgba(59, 7, 100, 0.08);
-  --color-border-strong: rgba(59, 7, 100, 0.16);
-  --color-text: #3b0764;
-  --color-text-dim: #581c87;
-  --color-muted: #6b21a8;
-  --shadow-glow: 0 0 0 1px rgba(157, 78, 221, 0.14), 0 8px 30px -12px rgba(157, 78, 221, 0.16);
+  --color-bg: #ffffff;
+  --color-bg-raised: #f8fafc;
+  --color-surface: #f1f5f9;
+  --color-surface-2: #e2e8f0;
+  --color-border: #cbd5e1;
+  --color-border-strong: #94a3b8;
+  --color-text: #0f172a;
+  --color-text-dim: #334155;
+  --color-muted: #475569;
+  --shadow-glow: 0 0 0 1px rgba(30, 64, 175, 0.14), 0 8px 30px -12px rgba(30, 64, 175, 0.16);
   color-scheme: light;
 }
 
